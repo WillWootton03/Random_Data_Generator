@@ -15,8 +15,13 @@ def format_headers(headers: list[tuple[str, str]] | str):
         headers_list = headers.split(',')
         l = 0
         cols = []
-        while l < len(headers_list) - 2:
-            cols.append(headers_list[l].strip().lower(), headers_list[l+1].strip().lower())
+        while l < len(headers_list) - 1:
+            # set key = to name of the column, and value = to the data type
+            key, val = headers_list[l].lower().strip(), headers_list[l+1].lower().strip()
+            # Verifies the type of value is acceptable
+            if val == 'str' or val == 'int' or val == 'float':
+                cols.append((key, val))
+            # Skip to next k,v pair in the string
             l += 2
         return cols
     return tuple([(col[0].strip().lower(), col[1]) for col in headers])
