@@ -84,8 +84,8 @@ Example Output:\
     print(new_row)
 ```
 The code below displays the method for generate millions of rows in minimal time. Utilizing numpy's random functions I make use of numpy's optimized C code which runs worlds faster than a traditional python for loop. After testing between running multi-processed python and numpy's functionality numpy is up to 10x faster so it works better for data processing. This produces a fully usable dataframe as the return value.\
-The code snippet is a small snippet showing our data dictionary, and the for loop iterates through all possible headers, it then checks whatever was pushed into row_data to set all columns. This is just the case for int values, there are similair match cases for float and str variables.
-Excample output:
+The code snippet is a small snippet showing our data dictionary, and the for loop iterates through all possible headers, it then checks whatever was pushed into row_data to set all columns. This is just the case for int values, there are similair match cases for float and str variables.\
+Example output:
 &nbsp;&nbsp;&nbsp;&nbsp;pd.df(size)
 ```python 
 data = {}
@@ -101,4 +101,21 @@ for h in headers:
                     print('Incorrect value in this row')
                 except:
                     print('Incorrect value in this row')
+```
+The code below is a simple save to csv, which has a defualt file name. The function prevents data files from overriding by incrementing the number extension on the end of the file. Besides the normal os.path, and df.to_csv this is the main file saving algorithm.\
+Example File name:
+&nbsp;&nbsp;&nbsp;&nbsp;'data_file_102.csv'
+```python
+# If it is a default file_name
+if file_name == 'data_file_':
+    # gets only the data file number for all files in the data dir
+    def_files = [int(file[10:-4]) for file in os.listdir(output_dir) if file.startswith('data_file_')]
+    # if there are any default file name styled files
+    if def_files:
+        # gets the largest data file extension number and increments it so no overriding files
+        num = str(max(def_files) + 1)
+        file_name += num + ext
+    else: 
+        # create the first default file name file
+        file_name = 'data_file_1.csv'
 ```

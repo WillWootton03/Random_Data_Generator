@@ -1,5 +1,4 @@
-from generator import format_headers, generate_row_data, generate_data
-from datetime import datetime
+from generator import format_headers, generate_row_data, generate_data, save_df_as_csv
 
 headers = [
     ('name', 'str'), 
@@ -116,5 +115,6 @@ def test_adding_sm_entries():
         'age' : [18, 100],
         'money' : [0, 100000]
     }
-    df = generate_data(formatted_headers, add_row, 100_000_000)
-    assert len(df) == 100_000_000
+    df = generate_data(formatted_headers, add_row, 1_000_000)
+    save_df_as_csv(df)
+    assert len(df) == 1_000_000

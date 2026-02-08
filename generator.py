@@ -1,7 +1,5 @@
 from random import uniform, randint, choice
 import pandas as pd
-from concurrent.futures import ProcessPoolExecutor
-from datetime import datetime
 import os
 import numpy as np
 
@@ -116,7 +114,7 @@ def generate_data(headers: list[tuple[str, str]],
                 # Attemps to add a float column to the df
                 case 'float':
                     try:
-                        data[h[0]] = np.random.uniform(row[0], row[1], num_entries)
+                        data[h[0]] = np.round(np.random.uniform(row[0], row[1], num_entries), 2)
                     except TypeError:
                         print('Incorrect value in this row')
                     except:
@@ -134,3 +132,36 @@ def generate_data(headers: list[tuple[str, str]],
     df = pd.DataFrame(data)
     return df
     
+def save_df_as_csv(df: pd.DataFrame, file_name: str = 'data_file_'):
+    """Simply saves a file to a data_files folder, or creates one in the current directory.
+        If no file_name is given saves to a base file name, and increments so no overrides occur
+
+    Args:
+        df (pd.DataFrame): The data frame to save
+        file_name (str, optional): the name of the file you want to save. Defaults to 'data_file_'.
+    """
+
+    output_dir = 'data_files'
+    ext = '.csv'
+
+    # Checks if there is a directory if not creates one
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # If it is a default file_name
+    if file_name == 'data_file_':
+        # gets only the data file number for all files in the data dir
+        def_files = [int(file[10:-4]) for file in os.listdir(output_dir) if file.startswith('data_file_')]
+        # if there are any default file name styled files
+        if def_files:
+            # gets the largest data file extension number and increments it so no overriding files
+            num = str(max(def_files) + 1)
+            file_name += num + ext
+        else: 
+            # create the first default file name file
+            file_name = 'data_file_1.csv'
+
+    # sets the file path to save to
+    file_path = os.path.join(output_dir, file_name)
+
+    df.to_csv(file_path, index=False)
