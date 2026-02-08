@@ -83,3 +83,22 @@ Example Output:\
     new_row = generate_row_data(formatted_headers, add_row)
     print(new_row)
 ```
+The code below displays the method for generate millions of rows in minimal time. Utilizing numpy's random functions I make use of numpy's optimized C code which runs worlds faster than a traditional python for loop. After testing between running multi-processed python and numpy's functionality numpy is up to 10x faster so it works better for data processing. This produces a fully usable dataframe as the return value.\
+The code snippet is a small snippet showing our data dictionary, and the for loop iterates through all possible headers, it then checks whatever was pushed into row_data to set all columns. This is just the case for int values, there are similair match cases for float and str variables.
+Excample output:
+&nbsp;&nbsp;&nbsp;&nbsp;pd.df(size)
+```python 
+data = {}
+for h in headers:
+    try: 
+        row = row_data[h[0]]
+        match h[1]:
+            # Attempts to add an int column to the df
+            case 'int':
+                try:
+                    data[h[0]] = np.random.randint(row[0], row[1], num_entries)
+                except TypeError:
+                    print('Incorrect value in this row')
+                except:
+                    print('Incorrect value in this row')
+```

@@ -1,4 +1,5 @@
-from generator import format_headers, generate_row_data
+from generator import format_headers, generate_row_data, generate_data
+from datetime import datetime
 
 headers = [
     ('name', 'str'), 
@@ -107,3 +108,13 @@ def test_incorrect_string_headers():
 
     assert new_row['name']
     assert new_row['age']
+
+def test_adding_sm_entries():
+    formatted_headers = format_headers('name, str, age, int, money, float')
+    add_row = {
+        'name' : available_names,
+        'age' : [18, 100],
+        'money' : [0, 100000]
+    }
+    df = generate_data(formatted_headers, add_row, 100_000_000)
+    assert len(df) == 100_000_000
